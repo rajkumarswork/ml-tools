@@ -1,0 +1,16 @@
+*.class
+*.log
+*.logs
+
+# sbt
+dist/*
+target/
+project/boot/
+project/target
+project/build.properties
+project/plugins/project/
+.history
+.cache
+
+# vim
+*~
