@@ -59,7 +59,7 @@ libraryDependencies ++= Seq(
 )
 
 // - Assembly plugin ---
-assemblyJarName in assembly := "ml-tools.jar"
+assemblyJarName in assembly := s"ml-tools-${mlToolsVersion}.jar"
 mainClass in assembly := Some("ml.tools.cli")
 assemblyMergeStrategy in assembly := {
  case PathList("META-INF", xs @ _*) => MergeStrategy.discard

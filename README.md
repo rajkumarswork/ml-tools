@@ -1,20 +1,22 @@
 ML Tools
 ========
 
-# ml-tools
-Tools that help with Machine Learning Tasks
-- export BigQuery Tables to svmlite rows, labeled-points or tensorflow records
-- train XGB models from tables or files
-- test trained XGB models
-
-## Why
-Transforms datasets to formats that  ML  Models understand.
-Also lightweing wrapper around XGBoost that helps with training and testing
+## What
+Command-line tool that exports datasets to ml-readable formats
+- BigQuery tables to SvmLite, LabeledPoint, TfRecords files or GCStorage objects
+- Lightweight wrapper around XGBoost that helps with training and testing
 
 ## Installing
+### With brew
+```
+brew tap rkumar/test
+brew install ml-tools
+```
+
+### From Source
 ```
 sbt assembly
-./scripts//ml-tools
+./scripts/ml-tools
 ```
 
 ## Usage
@@ -47,4 +49,22 @@ Subcommand: test (alias: te)
   -l, --label  <arg>
   -m, --model  <arg>
       --help              Show help message
+```
+
+## Examples
+
+#### Exporting from BQTable to GCStorage
+```
+ml-tools export -f svm -i project:dataset.click_table -l click -o gs://datasets//click_train.svm
+```
+Note: Since the hashsize was not specified, it will be calculated
+
+#### Training from GCStorage and saving model to GCStorage
+```
+ml-tools train -i gs://datasets/click_train.svm -m gs://models/click.xgb
+```
+
+#### Evaluating a svm dataset stored in GCStorage (XValidation)
+```
+ml-tools test -i gs://datasets/click_train.svm
 ```

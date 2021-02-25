@@ -89,6 +89,7 @@ object cli {
       case t: String if IO.isValidTable(t) && r.label.toOption.isDefined =>
         val hashSize = getHashSize(r.hashsize.toOption, t)
         XGB.train(HashTranslate.BQLabeledPoints(t, r.label(), hashSize))
+      case o: String if IO.isValidBlob(o) ⇒ XGB.trainBlob(o)
       case f: String ⇒ XGB.trainFile(f)
     }
     XGB.saveModel(m, IO.oStream(r.model()))
@@ -105,6 +106,7 @@ object cli {
         val model = XGB.loadModel(IO.iStream(e.model()))
         val lps = XGB.loadSamples(IO.iStream(f))
         XGB.auc(model, lps).toString
+      case o: String if IO.isValidBlob(o) ⇒ XGB.crossValidateBlob(o)
       case f: String => XGB.crossValidateFile(f)
     }
     println(o)

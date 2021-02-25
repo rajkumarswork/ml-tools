@@ -87,6 +87,9 @@ object XGB {
   def trainFile(file: String): Booster =
     XGBoost.train(new DMatrix(file), params, Iterations)
 
+  def trainBlob(path: String): Booster =
+    train( IO.blobLines(path).map(HashTranslate.svmToLP))
+
   // prediction
   def predict(m: Booster, lp: LabeledPoint): Float =
     m.predict(new DMatrix(Iterator(lp))).head.head
@@ -102,6 +105,10 @@ object XGB {
   def crossValidateFile(svmfile: String): String =
     XGBoost.crossValidation(new DMatrix(svmfile), params, Iterations, Folds, null, null, null)
       .mkString("\n")
+
+  def crossValidateBlob(path: String): String =
+    crossValidate( IO.blobLines(path).map(HashTranslate.svmToLP))
+
 
   def trainEvaluate(rlps: Iterator[LabeledPoint], tlps: Iterator[LabeledPoint]): Booster = {
     val rdm = new DMatrix(rlps)
